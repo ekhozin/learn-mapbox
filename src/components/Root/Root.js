@@ -10,33 +10,37 @@ const optionsMap = {
   population: {
     name: 'Population',
     description: 'Estimated total population',
-    property: 'pop_est',
-    stops: [
-      [0, '#f8d5cc'],
-      [1000000, '#f4bfb6'],
-      [5000000, '#f1a8a5'],
-      [10000000, '#ee8f9a'],
-      [50000000, '#ec739b'],
-      [100000000, '#dd5ca8'],
-      [250000000, '#c44cc0'],
-      [500000000, '#9f43d7'],
-      [1000000000, '#6e40e6'],
+    colorMap: [
+      'interpolate',
+      ['linear'],
+      ['get', 'pop_est'],
+      0, '#f8d5cc',
+      1000000, '#f4bfb6',
+      5000000, '#f1a8a5',
+      10000000, '#ee8f9a',
+      50000000, '#ec739b',
+      100000000, '#dd5ca8',
+      250000000, '#c44cc0',
+      500000000, '#9f43d7',
+      1000000000, '#6e40e6',
     ],
   },
   gdp: {
     name: 'GDP',
     description: 'Estimate total GDP in millions of dollars',
-    property: 'gdp_md_est',
-    stops: [
-      [0, '#f8d5cc'],
-      [1000, '#f4bfb6'],
-      [5000, '#f1a8a5'],
-      [10000, '#ee8f9a'],
-      [50000, '#ec739b'],
-      [100000, '#dd5ca8'],
-      [250000, '#c44cc0'],
-      [5000000, '#9f43d7'],
-      [10000000, '#6e40e6'],
+    colorMap: [
+      'interpolate',
+      ['linear'],
+      ['get', 'gdp_md_est'],
+      0, '#f8d5cc',
+      1000, '#f4bfb6',
+      5000, '#f1a8a5',
+      10000, '#ee8f9a',
+      50000, '#ec739b',
+      100000, '#dd5ca8',
+      250000, '#c44cc0',
+      5000000, '#9f43d7',
+      10000000, '#6e40e6',
     ],
   },
 };
@@ -70,7 +74,10 @@ function Root() {
       });
     });
 
+    mapInstance.current.addControl(new mapboxgl.NavigationControl());
+
     mapInstance.current.on('load', () => {
+      // add colored stats
       mapInstance.current.addSource('countries', {
         type: 'geojson',
         data: mapData,
@@ -80,17 +87,65 @@ function Root() {
         id: 'countries',
         type: 'fill',
         source: 'countries',
-      }, 'country-label-lg'); // ID metches `mapbox/streets-v9`
+      }, 'country-label-lg');
 
       setFill('population');
+
+      function loadImage(url) {
+        return new Promise((resolve, reject) => {
+          mapInstance.current.loadImage(url, (error, image) => {
+            if (error) {
+              return reject(error);
+            }
+
+            resolve(image);
+          });
+        });
+      }
+
+
+      // add image
+      loadImage('https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png').then((image) => {
+        mapInstance.current.addImage('cat', image);
+
+        mapInstance.current.addSource('point', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [1, 6],
+                },
+              },
+            ],
+          },
+        });
+
+        mapInstance.current.addLayer({
+          id: 'points',
+          type: 'symbol',
+          source: 'point',
+          layout: {
+            'icon-image': 'cat',
+            'icon-size': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              0, 0.15,
+              1, 0.12,
+              2, 0.1,
+            ],
+          },
+        });
+      });
     });
   }, []);
 
   function setFill(option) {
-    mapInstance.current.setPaintProperty('countries', 'fill-color', {
-      property: optionsMap[option].property,
-      stops:  optionsMap[option].stops,
-    });
+    mapInstance.current.setPaintProperty('countries', 'fill-color', optionsMap[option].colorMap);
   }
 
   function handleChangeOption(option) {

@@ -1,0 +1,16 @@
+.MapContainer {
+    position: relative;
+    box-sizing: border-box;
+    margin: 50px auto;
+    width: 80%;
+    height: 0;
+    padding-bottom: 60%;
+}
+
+.MapContent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}

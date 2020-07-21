@@ -1,0 +1,81 @@
+{
+  "name": "noveo-meetings",
+  "version": "1.0.0",
+  "repository": "",
+  "author": "Noveo",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack-dev-server --progress",
+    "build:prod": "cross-env NODE_ENV=production webpack --progress",
+    "lint": "eslint --ext .js --ext .jsx src --color",
+    "lint:fix": "eslint --fix .",
+    "env": "cp .env.default .env",
+    "server": "node server",
+    "start:prod": "cross-env NODE_ENV=production webpack-dev-server --progress"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "yarn lint:fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "connected-react-router": "^6.6.1",
+    "history": "^4.10.1",
+    "lodash": "^4.17.15",
+    "mapbox-gl": "^1.11.1",
+    "prop-types": "^15.7.2",
+    "qs": "^6.9.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-intl": "^3.6.2",
+    "react-redux": "^7.1.3",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.1.3",
+    "regenerator-runtime": "^0.13.3",
+    "reselect": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "autoprefixer": "^9.7.2",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "connect-history-api-fallback": "^1.6.0",
+    "cross-env": "^6.0.3",
+    "css-loader": "^3.2.0",
+    "dotenv-webpack": "^1.7.0",
+    "eslint": "^6.6.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "express": "^4.17.1",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^3.1.0",
+    "lint-staged": "^10.0.0-beta.4",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.13.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "react-hot-loader": "^4.12.18",
+    "redux-devtools-extension": "^2.13.8",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "terser-webpack-plugin": "^2.2.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  }
+}
